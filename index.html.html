@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meus Números</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+:root {
+  --bg:#0f1117; --surface:#181c27; --border:#252a38;
+  --accent:#4f6ef7; --accent2:#22d3a5; --danger:#f75e5e;
+  --warning:#f7b955; --text:#e8eaf2; --muted:#6b7394; --card:#1e2333;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+#login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:2rem;gap:2rem}
+.brand{font-size:.75rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.login-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;display:flex;flex-direction:column;gap:1.5rem}
+.login-box h1{font-size:1.6rem;font-weight:700;line-height:1.2}
+.login-box h1 span{color:var(--accent)}
+.login-box p{color:var(--muted);font-size:.9rem;margin-top:-.5rem}
+.pin-wrap{display:flex;gap:.75rem;justify-content:center}
+.pin-digit{width:64px;height:72px;background:var(--bg);border:2px solid var(--border);border-radius:12px;font-family:'DM Mono',monospace;font-size:2rem;font-weight:500;color:var(--text);text-align:center;outline:none;transition:border-color .2s;-webkit-text-security:disc}
+.pin-digit:focus{border-color:var(--accent)}
+.btn-enter{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:1rem;font-weight:600;cursor:pointer;transition:opacity .2s;width:100%}
+.btn-enter:hover{opacity:.85}
+.error-msg{color:var(--danger);font-size:.85rem;text-align:center;min-height:1.2em}
+#dash{display:none;flex-direction:column;min-height:100vh;padding:1.5rem 1.5rem 3rem;max-width:960px;margin:0 auto;gap:1.5rem}
+.dash-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.seller-id{font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--accent)}
+.dash-header h2{font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;text-transform:capitalize}
+.btn-back{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.5rem 1rem;color:var(--muted);font-size:.85rem;font-weight:500;cursor:pointer;transition:color .2s,border-color .2s}
+.btn-back:hover{color:var(--text);border-color:var(--muted)}
+.status-banner{border-radius:12px;padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;font-weight:600;font-size:.95rem}
+.status-banner.ok{background:#0e2e27;border:1px solid #22d3a5;color:#22d3a5}
+.status-banner.warn{background:#2e1f0e;border:1px solid #f7b955;color:#f7b955}
+.dot{width:10px;height:10px;border-radius:50%;background:currentColor;flex-shrink:0}
+.progress-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.5rem}
+.progress-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem}
+.prog-label{font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.prog-pct{font-family:'DM Mono',monospace;font-size:1.4rem;font-weight:500}
+.progress-track{background:var(--border);border-radius:100px;height:10px;overflow:hidden}
+.progress-fill{height:100%;border-radius:100px;transition:width .8s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.progress-fill.danger{background:linear-gradient(90deg,var(--danger),#f7b955)}
+.progress-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.75rem;color:var(--muted);font-family:'DM Mono',monospace}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.75rem}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem}
+.kpi-card.highlight{border-color:var(--accent)}
+.kpi-label{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.kpi-value{font-family:'DM Mono',monospace;font-size:1.45rem;font-weight:500;line-height:1}
+.kpi-sub{font-size:.75rem;color:var(--muted);margin-top:.35rem}
+.good .kpi-value{color:var(--accent2)}
+.bad .kpi-value{color:var(--danger)}
+.day-goal{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.dg-label{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.dg-value{font-family:'DM Mono',monospace;font-size:1.6rem;font-weight:500;color:var(--warning)}
+.section-title{font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.75rem}
+.week-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem}
+.week-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem}
+.wk-label{font-size:.65rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.wk-value{font-family:'DM Mono',monospace;font-size:1rem;font-weight:500}
+@media(max-width:480px){
+  #dash{padding:1rem 1rem 2rem}
+  .pin-digit{width:56px;height:64px;font-size:1.7rem}
+}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="brand">Dashboard de Vendas</div>
+  <div class="login-box">
+    <div>
+      <h1>Seus <span>números</span></h1>
+      <p>Digite sua senha de 4 dígitos</p>
+    </div>
+    <div class="pin-wrap">
+      <input class="pin-digit" id="p0" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+      <input class="pin-digit" id="p1" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+      <input class="pin-digit" id="p2" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+      <input class="pin-digit" id="p3" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+    </div>
+    <div class="error-msg" id="err"></div>
+    <button class="btn-enter" onclick="tryLogin()">Entrar</button>
+  </div>
+</div>
+
+<div id="dash">
+  <div class="dash-header">
+    <div>
+      <div class="seller-id" id="d-team"></div>
+      <h2 id="d-name"></h2>
+    </div>
+    <button class="btn-back" onclick="logout()">← Sair</button>
+  </div>
+  <div class="status-banner" id="d-banner"><div class="dot"></div><span id="d-status"></span></div>
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="prog-label">Meta do mês</span>
+      <span class="prog-pct" id="d-pct">0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="d-fill" style="width:0%"></div></div>
+    <div class="progress-labels"><span id="d-fat-lbl"></span><span id="d-meta-lbl"></span></div>
+  </div>
+  <div class="kpi-grid" id="d-kpis"></div>
+  <div class="day-goal" id="d-daygoal">
+    <div>
+      <div class="dg-label">Meta do dia</div>
+      <div style="color:var(--muted);font-size:.8rem;margin-top:.2rem" id="d-dg-sub"></div>
+    </div>
+    <div class="dg-value" id="d-dg-val"></div>
+  </div>
+  <div>
+    <div class="section-title">Vendas por semana</div>
+    <div class="week-grid" id="d-weeks"></div>
+  </div>
+  <div>
+    <div class="section-title">Clientes &amp; Orçamentos</div>
+    <div class="kpi-grid" id="d-clients"></div>
+  </div>
+</div>
+
+<script>
+const DATA = {"6022": {"nome": "ANA CRISTINA WRUCH", "equipe": "SP", "ranking": 10, "meta": 540000.0, "faturado": 198454.98999999996, "va": 0, "aguFaturar": 9198.6, "total": 207653.58999999997, "icm": 0.3845436851851851, "status": "Fora do Relógio", "gap": 332346.41000000003, "metaCli": 78.0, "qtdCli": 39.0, "orcQtd": 166.0, "orcTot": 544954.7000000004, "conv": 0.3810474338509234, "metaDia": 41543.301250000004, "semanas": [67296.98999999999, 220730.14, 0.0, 0.0]}, "7680": {"nome": "ANASTÁZIA BERNARDINO MOREIRA", "equipe": "SP", "ranking": 3, "meta": 100000.0, "faturado": 91710.83999999998, "va": 0, "aguFaturar": 8736.0, "total": 100446.83999999998, "icm": 1.0044684, "status": "No Relógio", "gap": -446.83999999998196, "metaCli": 0, "qtdCli": 48.0, "orcQtd": 140.0, "orcTot": 405658.7700000002, "conv": 0.24761412159288443, "metaDia": -55.854999999997744, "semanas": [48032.6, 92601.75000000003, 0.0, 0.0]}, "4025": {"nome": "CHARLES FERREIRA LACAVA", "equipe": "POA", "ranking": 0, "meta": 0.0, "faturado": 428.91, "va": 0, "aguFaturar": 0.0, "total": 428.91, "icm": 0, "status": "nan", "gap": -428.91, "metaCli": 0, "qtdCli": 1.0, "orcQtd": 3.0, "orcTot": 887.02, "conv": 0, "metaDia": 0, "semanas": []}, "0165": {"nome": "DIEGO SAMPAIO", "equipe": "SP", "ranking": 0, "meta": 0.0, "faturado": 7668.33, "va": 0, "aguFaturar": 0.0, "total": 7668.33, "icm": 0, "status": "nan", "gap": -7668.33, "metaCli": 0, "qtdCli": 2.0, "orcQtd": 24.0, "orcTot": 134464.78000000003, "conv": 0, "metaDia": 0, "semanas": []}, "2580": {"nome": "FLAVIO MACHADO DOS REIS", "equipe": "SP", "ranking": 12, "meta": 420000.0, "faturado": 135158.85, "va": 0, "aguFaturar": 3944.62, "total": 139103.47, "icm": 0.3311987380952381, "status": "Fora do Relógio", "gap": 280896.53, "metaCli": 60.0, "qtdCli": 38.0, "orcQtd": 114.0, "orcTot": 634207.7999999999, "conv": 0.21933421506326478, "metaDia": 35112.06625, "semanas": [28554.21, 144955.15, 0.0, 0.0]}, "8631": {"nome": "GISELE PRIEBE PINHEIRO", "equipe": "POA", "ranking": 7, "meta": 700000.0, "faturado": 333586.76999999996, "va": 8779.21, "aguFaturar": 21180.0, "total": 363545.98, "icm": 0.5193514, "status": "Fora do Relógio", "gap": 336454.02, "metaCli": 81.0, "qtdCli": 55.0, "orcQtd": 138.0, "orcTot": 692030.27, "conv": 0.5253324829273724, "metaDia": 42056.7525, "semanas": [57022.200000000004, 387708.44000000006, 0.0, 0.0]}, "9300": {"nome": "JONATAN AZEVEDO DE SOUZA", "equipe": "POA", "ranking": 6, "meta": 130000.0, "faturado": 65741.01000000001, "va": 0, "aguFaturar": 5192.32, "total": 70933.33000000002, "icm": 0.5456410000000002, "status": "Fora do Relógio", "gap": 59066.669999999984, "metaCli": 18.0, "qtdCli": 27.0, "orcQtd": 91.0, "orcTot": 267695.0, "conv": 0.2649781654494855, "metaDia": 7383.333749999998, "semanas": [18296.519999999997, 68836.79999999999, 0.0, 0.0]}, "8687": {"nome": "JOSE ANTONIO OLIVEIRA", "equipe": "POA", "ranking": 11, "meta": 550000.0, "faturado": 185952.22999999998, "va": 0, "aguFaturar": 18959.660000000003, "total": 204911.88999999998, "icm": 0.3725670727272727, "status": "Fora do Relógio", "gap": 345088.11, "metaCli": 48.0, "qtdCli": 27.0, "orcQtd": 76.0, "orcTot": 1906524.6500000001, "conv": 0.10747927649401227, "metaDia": 43136.01375, "semanas": [55676.43, 161699.24, 0.0, 0.0]}, "5935": {"nome": "KELLY MAYANA OLIVEIRA", "equipe": "POA", "ranking": 0, "meta": 0.0, "faturado": 0.0, "va": 0, "aguFaturar": 0.0, "total": 0.0, "icm": 0, "status": "nan", "gap": 0.0, "metaCli": 0, "qtdCli": 0.0, "orcQtd": 2.0, "orcTot": 9436.33, "conv": 0, "metaDia": 0, "semanas": []}, "8685": {"nome": "MATEUS OSTROWSKI", "equipe": "POA", "ranking": 13, "meta": 240000.0, "faturado": 71297.72999999998, "va": 0, "aguFaturar": 0.0, "total": 71297.72999999998, "icm": 0.29707387499999993, "status": "Fora do Relógio", "gap": 168702.27000000002, "metaCli": 40.0, "qtdCli": 21.0, "orcQtd": 57.0, "orcTot": 146176.24999999997, "conv": 0.48775180646650873, "metaDia": 21087.783750000002, "semanas": [5823.719999999999, 77793.4, 0.0, 0.0]}, "7022": {"nome": "MATHEUS ALMEIDA DE OLIVEIRA", "equipe": "POA", "ranking": 0, "meta": 0.0, "faturado": 1233.32, "va": 0, "aguFaturar": 2.8, "total": 1236.12, "icm": 0, "status": "nan", "gap": -1236.12, "metaCli": 0, "qtdCli": 1.0, "orcQtd": 6.0, "orcTot": 68104.32, "conv": 0.01815039045981224, "metaDia": -154.515, "semanas": [1233.32, 1233.32, 0.0, 0.0]}, "0212": {"nome": "MIQUÉIAS DOS SANTOS DA GAMA", "equipe": "POA", "ranking": 2, "meta": 20000.0, "faturado": 27931.930000000004, "va": 0, "aguFaturar": 0.0, "total": 27931.930000000004, "icm": 1.3965965000000002, "status": "No Relógio", "gap": -7931.930000000004, "metaCli": 0, "qtdCli": 17.0, "orcQtd": 68.0, "orcTot": 88054.66999999998, "conv": 0.3172112279791635, "metaDia": 0, "semanas": [11120.45, 21560.199999999997, 0.0, 0.0]}, "6332": {"nome": "NAIARA VAZ", "equipe": "POA", "ranking": 9, "meta": 280000.0, "faturado": 117044.44999999998, "va": 0, "aguFaturar": 0.0, "total": 117044.44999999998, "icm": 0.4180158928571428, "status": "Fora do Relógio", "gap": 162955.55000000002, "metaCli": 40.0, "qtdCli": 20.0, "orcQtd": 91.0, "orcTot": 355841.0600000001, "conv": 0.32892339630508055, "metaDia": 20369.443750000002, "semanas": [20803.68, 90489.19, 0.0, 0.0]}, "2966": {"nome": "VAGNER TAVARES KULZER", "equipe": "POA", "ranking": 5, "meta": 240000.0, "faturado": 158022.69999999995, "va": 0, "aguFaturar": 0.0, "total": 158022.69999999995, "icm": 0.6584279166666664, "status": "No Relógio", "gap": 81977.30000000005, "metaCli": 82.0, "qtdCli": 56.0, "orcQtd": 178.0, "orcTot": 330503.4, "conv": 0.47812730519564983, "metaDia": 10247.162500000006, "semanas": [48972.1, 167159.36999999994, 0.0, 0.0]}, "1713": {"nome": "VANESSA VIEGAS SCHLEMMER", "equipe": "POA", "ranking": 8, "meta": 400000.0, "faturado": 190623.52000000005, "va": 0, "aguFaturar": 5812.09, "total": 196435.61000000004, "icm": 0.4910890250000001, "status": "Fora do Relógio", "gap": 203564.38999999996, "metaCli": 81.0, "qtdCli": 54.0, "orcQtd": 157.0, "orcTot": 379672.56999999995, "conv": 0.5173816217484452, "metaDia": 25445.548749999994, "semanas": [27456.879999999997, 167322.01, 0.0, 0.0]}, "9656": {"nome": "VERIDIANA DE SOUZA AZEREDO", "equipe": "POA", "ranking": 1, "meta": 100000.0, "faturado": 316792.54000000004, "va": 0, "aguFaturar": 0.0, "total": 316792.54000000004, "icm": 3.1679254000000006, "status": "No Relógio", "gap": -216792.54000000004, "metaCli": 0, "qtdCli": 7.0, "orcQtd": 20.0, "orcTot": 363474.60000000003, "conv": 0.8715672016696627, "metaDia": -27099.067500000005, "semanas": [0.0, 581083.02, 0.0, 0.0]}, "8720": {"nome": "WILLIAMS SANTOS DE ANDRADE", "equipe": "POA", "ranking": 4, "meta": 270000.0, "faturado": 182798.13, "va": 0, "aguFaturar": 5653.969999999999, "total": 188452.1, "icm": 0.6979707407407407, "status": "No Relógio", "gap": 81547.9, "metaCli": 67.0, "qtdCli": 37.0, "orcQtd": 105.0, "orcTot": 321920.19999999995, "conv": 0.5854000463468898, "metaDia": 10193.4875, "semanas": [50544.99, 208562.88999999998, 0.0, 0.0]}, "3229": {"nome": "WILMA GERENTE", "equipe": "SP", "ranking": 14, "meta": 100000.0, "faturado": 12388.16, "va": 0, "aguFaturar": 0.0, "total": 12388.16, "icm": 0.1238816, "status": "Fora do Relógio", "gap": 87611.84, "metaCli": 0, "qtdCli": 3.0, "orcQtd": 15.0, "orcTot": 103079.23, "conv": 0.12018095206958763, "metaDia": 10951.48, "semanas": [0.0, 9446.06, 0.0, 0.0]}};
+
+const pins = [0,1,2,3].map(i => document.getElementById('p'+i));
+pins.forEach((el, i) => {
+  el.addEventListener('input', () => {
+    el.value = el.value.replace(/[^0-9]/g,'').slice(-1);
+    if (el.value && i < 3) pins[i+1].focus();
+    document.getElementById('err').textContent = '';
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Backspace' && !el.value && i > 0) pins[i-1].focus();
+    if (e.key === 'Enter') tryLogin();
+  });
+});
+pins[0].focus();
+
+function tryLogin() {
+  const pwd = pins.map(p => p.value).join('');
+  if (pwd.length < 4) { setErr('Digite os 4 dígitos'); return; }
+  const d = DATA[pwd];
+  if (!d) { setErr('Senha incorreta'); pins.forEach(p => p.value=''); pins[0].focus(); return; }
+  renderDash(d);
+}
+
+function setErr(msg) { document.getElementById('err').textContent = msg; }
+
+function logout() {
+  document.getElementById('dash').style.display = 'none';
+  document.getElementById('login').style.display = 'flex';
+  pins.forEach(p => p.value='');
+  pins[0].focus();
+  window.scrollTo(0,0);
+}
+
+function renderDash(d) {
+  document.getElementById('d-team').textContent = 'Equipe ' + d.equipe;
+  document.getElementById('d-name').textContent = toTitle(d.nome);
+
+  const ok = d.status.toLowerCase().includes('no relógio') || d.status.toLowerCase().includes('no relogio');
+  const banner = document.getElementById('d-banner');
+  banner.className = 'status-banner ' + (ok ? 'ok' : 'warn');
+  document.getElementById('d-status').textContent = d.status || '—';
+
+  const pct = d.meta > 0 ? d.icm * 100 : 0;
+  document.getElementById('d-pct').textContent = d.meta > 0 ? pct.toFixed(1)+'%' : '—';
+  const fill = document.getElementById('d-fill');
+  fill.style.width = Math.min(pct, 100) + '%';
+  fill.className = 'progress-fill' + (pct < 50 ? ' danger' : '');
+  document.getElementById('d-fat-lbl').textContent = 'Faturado: ' + fmt(d.faturado);
+  document.getElementById('d-meta-lbl').textContent = 'Meta: ' + fmt(d.meta);
+
+  // KPIs principais (sem VA, conversão, meta de clientes e % ICM - ICM ficou só na barra de progresso)
+  const kpis = [
+    { label:'Faturado', value:fmt(d.faturado), cls:'neutral highlight' },
+    { label:'Vendas Total', value:fmt(d.total), cls:'neutral', sub:'incl. aguardando faturar' },
+    { label:'Aguard. Faturar', value:fmt(d.aguFaturar), cls:'neutral' },
+    d.gap <= 0
+      ? { label:'GAP da Meta', value:'Meta batida! 🎉', cls:'good' }
+      : { label:'GAP da Meta', value:fmt(d.gap), cls:'bad', sub:'falta para a meta' },
+    d.ranking > 0 ? { label:'Ranking', value:'#'+d.ranking, cls: d.ranking<=3?'good':'neutral' } : null,
+  ].filter(Boolean);
+
+  document.getElementById('d-kpis').innerHTML = kpis.map(k =>
+    `<div class="kpi-card ${k.cls}"><div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div>${k.sub?`<div class="kpi-sub">${k.sub}</div>`:''}</div>`
+  ).join('');
+
+  const mdv = document.getElementById('d-dg-val');
+  const dg = document.getElementById('d-daygoal');
+  if (d.metaDia && Math.abs(d.metaDia) > 0.5) {
+    mdv.textContent = fmt(Math.abs(d.metaDia));
+    document.getElementById('d-dg-sub').textContent = d.metaDia < 0 ? 'Meta já superada hoje 🎉' : 'valor diário necessário';
+    mdv.style.color = d.metaDia < 0 ? 'var(--accent2)' : 'var(--warning)';
+    dg.style.display = '';
+  } else { dg.style.display = 'none'; }
+
+  // Vendas por semana - acumulado progressivo (não zera semanas futuras)
+  const wg = document.getElementById('d-weeks');
+  const semRaw = (d.semanas||[]).slice(0,4);
+  wg.innerHTML = semRaw.length
+    ? semRaw.map((v,i) => `<div class="week-card"><div class="wk-label">${i+1}ª Semana</div><div class="wk-value">${fmt(v)}</div></div>`).join('')
+    : '<p style="color:var(--muted);font-size:.85rem">Sem dados semanais.</p>';
+
+  // Clientes & Orçamentos - Meta de Clientes, VA, Orçamentos e Conversão (com gradiente de cor da planilha)
+  const cg = document.getElementById('d-clients');
+  const ck = [
+    d.metaCli>0 ? { label:'Meta de Clientes', value:d.metaCli, cls:'neutral' } : null,
+    d.qtdCli>0 ? { label:'Clientes Compraram', value:d.qtdCli, cls: (d.metaCli>0 && d.qtdCli>=d.metaCli)?'good':'neutral' } : null,
+    d.va>0 ? { label:'VA', value:fmt(d.va), cls:'neutral' } : null,
+    d.orcQtd>0 ? { label:'Qtd. Orçamentos', value:d.orcQtd, cls:'neutral' } : null,
+    d.orcTot>0 ? { label:'Total Orçado', value:fmt(d.orcTot), cls:'neutral' } : null,
+    d.conv>0 ? { label:'Conversão/Mês', value:(d.conv*100).toFixed(1)+'%', cls:'', style:`color:${convColor(d.conv)}` } : null,
+  ].filter(Boolean);
+  cg.innerHTML = ck.length
+    ? ck.map(k => `<div class="kpi-card ${k.cls}"><div class="kpi-label">${k.label}</div><div class="kpi-value" style="${k.style||''}">${k.value}</div></div>`).join('')
+    : '<p style="color:var(--muted);font-size:.85rem">Sem dados de clientes.</p>';
+
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('dash').style.display = 'flex';
+  window.scrollTo(0,0);
+}
+
+// Gradiente de cor igual à formatação condicional da planilha: 0% vermelho, 50% amarelo, 100% verde
+function convColor(conv) {
+  const pct = Math.max(0, Math.min(1, conv)); // 0 a 1, clamped
+  const red    = [0xF8,0x69,0x6B];
+  const yellow = [0xFF,0xEB,0x84];
+  const green  = [0x63,0xBE,0x7B];
+  let c1, c2, t;
+  if (pct <= 0.5) { c1 = red; c2 = yellow; t = pct / 0.5; }
+  else { c1 = yellow; c2 = green; t = (pct - 0.5) / 0.5; }
+  const rgb = c1.map((v,i) => Math.round(v + (c2[i]-v)*t));
+  return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+}
+
+function fmt(v) {
+  if (!v && v!==0) return '—';
+  return 'R$ ' + Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+function toTitle(s) {
+  return s.toLowerCase().replace(/\b\w/g, c=>c.toUpperCase());
+}
+</script>
+</body>
+</html>
