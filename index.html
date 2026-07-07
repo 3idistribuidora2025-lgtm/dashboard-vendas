@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/Suporte/Downloads/dashboard_vendedores_3i_12.html -->
+<!-- saved from url=(0066)file:///C:/Users/Suporte/Downloads/dashboard_vendedores_3i_13.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -187,7 +187,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
     <div class="section-title">Clientes &amp; Orçamentos</div>
     <div class="kpi-grid" id="d-clients"></div>
   </div>
-  <div class="updated-at" id="d-updated">Atualizado em 07/07/2026, 08:29:17</div>
+  <div class="updated-at" id="d-updated">Atualizado em 07/07/2026, 08:47:38</div>
 </div>
 
 <script>
@@ -470,7 +470,7 @@ function renderDash(d) {
   document.getElementById('d-status').textContent = d.status || '—';
 
   const pct = d.meta > 0 ? d.icm * 100 : 0;
-  document.getElementById('d-pct').textContent = d.meta > 0 ? pct.toFixed(1)+'%' : '—';
+  document.getElementById('d-pct').textContent = d.meta > 0 ? pct.toFixed(1)+'%' : 'Sem meta';
   const fill = document.getElementById('d-fill');
   fill.style.width = Math.min(pct, 100) + '%';
   fill.className = 'progress-fill' + (pct < 50 ? ' danger' : '');
@@ -481,9 +481,11 @@ function renderDash(d) {
     { label:'Faturado', value:fmt(d.faturado), cls:'neutral highlight' },
     { label:'Vendas Total', value:fmt(d.total), cls:'neutral', sub:'incl. aguardando faturar' },
     { label:'Aguard. Faturar', value:fmt(d.aguFaturar), cls:'neutral' },
-    d.gap <= 0
+    d.meta > 0 && d.gap <= 0
       ? { label:'GAP da Meta', value:'Meta batida! 🎉', cls:'good' }
-      : { label:'GAP da Meta', value:fmt(d.gap), cls:'bad', sub:'falta para a meta' },
+      : d.meta > 0
+      ? { label:'GAP da Meta', value:fmt(d.gap), cls:'bad', sub:'falta para a meta' }
+      : { label:'GAP da Meta', value:'—', cls:'neutral' },
     d.ranking > 0 ? { label:'Ranking', value:'#'+d.ranking, cls: d.ranking<=3?'good':'neutral' } : null,
   ].filter(Boolean);
 
