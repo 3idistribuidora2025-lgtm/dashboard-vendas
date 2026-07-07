@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/Suporte/Downloads/dashboard_vendedores_3i_13.html -->
+<!-- saved from url=(0066)file:///C:/Users/Suporte/Downloads/dashboard_vendedores_3i_15.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -154,25 +154,25 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <!-- DASHBOARD -->
-<div id="dash">
+<div id="dash" style="display: none;">
   <div class="dash-header">
     <div>
-      <div class="seller-id" id="d-team"></div>
-      <h2 id="d-name"></h2>
+      <div class="seller-id" id="d-team">Equipe SP</div>
+      <h2 id="d-name">Diego Sampaio</h2>
     </div>
     <button class="btn-back" onclick="logout()">← Sair</button>
   </div>
-  <div class="status-banner" id="d-banner"><div class="dot"></div><span id="d-status"></span></div>
+  <div class="status-banner warn" id="d-banner"><div class="dot"></div><span id="d-status">—</span></div>
   <div class="progress-section">
     <div class="progress-header">
       <span class="prog-label">Meta do mês</span>
-      <span class="prog-pct" id="d-pct">0%</span>
+      <span class="prog-pct" id="d-pct">Sem meta</span>
     </div>
-    <div class="progress-track"><div class="progress-fill" id="d-fill" style="width:0%"></div></div>
-    <div class="progress-labels"><span id="d-fat-lbl"></span><span id="d-meta-lbl"></span></div>
+    <div class="progress-track"><div class="progress-fill danger" id="d-fill" style="width:0%"></div></div>
+    <div class="progress-labels"><span id="d-fat-lbl">Faturado: R$ 0</span><span id="d-meta-lbl">Meta: R$ 0</span></div>
   </div>
-  <div class="kpi-grid" id="d-kpis"></div>
-  <div class="day-goal" id="d-daygoal">
+  <div class="kpi-grid" id="d-kpis"><div class="kpi-card neutral highlight"><div class="kpi-label">Faturado</div><div class="kpi-value">R$ 0</div></div><div class="kpi-card neutral"><div class="kpi-label">Vendas Total</div><div class="kpi-value">R$ 0</div><div class="kpi-sub">incl. aguardando faturar</div></div><div class="kpi-card neutral"><div class="kpi-label">Aguard. Faturar</div><div class="kpi-value">R$ 0</div></div><div class="kpi-card neutral"><div class="kpi-label">GAP da Meta</div><div class="kpi-value">—</div></div><div class="kpi-card neutral"><div class="kpi-label">Ranking</div><div class="kpi-value">#15</div></div></div>
+  <div class="day-goal" id="d-daygoal" style="display: none;">
     <div>
       <div class="dg-label">Meta do dia</div>
       <div style="color:var(--muted);font-size:.8rem;margin-top:.2rem" id="d-dg-sub"></div>
@@ -181,13 +181,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   </div>
   <div>
     <div class="section-title">Vendas por semana</div>
-    <div class="week-grid" id="d-weeks"></div>
+    <div class="week-grid" id="d-weeks"><div class="week-card"><div class="wk-label">1ª Semana</div><div class="wk-value">R$ 0</div></div><div class="week-card"><div class="wk-label">2ª Semana</div><div class="wk-value">R$ 0</div></div><div class="week-card"><div class="wk-label">3ª Semana</div><div class="wk-value">R$ 0</div></div><div class="week-card"><div class="wk-label">4ª Semana</div><div class="wk-value">R$ 0</div></div></div>
   </div>
   <div>
     <div class="section-title">Clientes &amp; Orçamentos</div>
-    <div class="kpi-grid" id="d-clients"></div>
+    <div class="kpi-grid" id="d-clients"><div class="kpi-card neutral"><div class="kpi-label">Qtd. Orçamentos</div><div class="kpi-value" style="">8</div></div><div class="kpi-card neutral"><div class="kpi-label">Total Orçado</div><div class="kpi-value" style="">R$ 34.408</div></div></div>
   </div>
-  <div class="updated-at" id="d-updated">Atualizado em 07/07/2026, 08:47:38</div>
+  <div class="updated-at" id="d-updated">Atualizado em 07/07/2026, 08:51:58</div>
 </div>
 
 <script>
