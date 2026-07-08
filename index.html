@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0066)file:///C:/Users/Suporte/Downloads/dashboard_vendedores_3i_16.html -->
+<!-- saved from url=(0066)file:///C:/Users/Suporte/Downloads/dashboard_vendedores_3i_18.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -154,40 +154,40 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <!-- DASHBOARD -->
-<div id="dash" style="display: none;">
+<div id="dash">
   <div class="dash-header">
     <div>
-      <div class="seller-id" id="d-team">Equipe POA</div>
-      <h2 id="d-name">Gisele Priebe Pinheiro</h2>
+      <div class="seller-id" id="d-team"></div>
+      <h2 id="d-name"></h2>
     </div>
     <button class="btn-back" onclick="logout()">← Sair</button>
   </div>
-  <div class="status-banner ok" id="d-banner"><div class="dot"></div><span id="d-status">No Relógio</span></div>
+  <div class="status-banner" id="d-banner"><div class="dot"></div><span id="d-status"></span></div>
   <div class="progress-section">
     <div class="progress-header">
       <span class="prog-label">Meta do mês</span>
-      <span class="prog-pct" id="d-pct">19.1%</span>
+      <span class="prog-pct" id="d-pct">0%</span>
     </div>
-    <div class="progress-track"><div class="progress-fill danger" id="d-fill" style="width: 19.0618%;"></div></div>
-    <div class="progress-labels"><span id="d-fat-lbl">Faturado: R$ 67.661</span><span id="d-meta-lbl">Meta: R$ 700.000</span></div>
+    <div class="progress-track"><div class="progress-fill" id="d-fill" style="width:0%"></div></div>
+    <div class="progress-labels"><span id="d-fat-lbl"></span><span id="d-meta-lbl"></span></div>
   </div>
-  <div class="kpi-grid" id="d-kpis"><div class="kpi-card neutral highlight"><div class="kpi-label">Faturado</div><div class="kpi-value">R$ 67.661</div></div><div class="kpi-card neutral"><div class="kpi-label">Vendas Total</div><div class="kpi-value">R$ 133.433</div><div class="kpi-sub">incl. aguardando faturar</div></div><div class="kpi-card neutral"><div class="kpi-label">Aguard. Faturar</div><div class="kpi-value">R$ 56.031</div></div><div class="kpi-card neutral"><div class="kpi-label">VA</div><div class="kpi-value">R$ 9.740</div></div><div class="kpi-card bad"><div class="kpi-label">GAP da Meta</div><div class="kpi-value">R$ 566.567</div><div class="kpi-sub">falta para a meta</div></div><div class="kpi-card good"><div class="kpi-label">Ranking</div><div class="kpi-value">#3</div></div></div>
+  <div class="kpi-grid" id="d-kpis"></div>
   <div class="day-goal" id="d-daygoal">
     <div>
       <div class="dg-label">Meta do dia</div>
-      <div style="color:var(--muted);font-size:.8rem;margin-top:.2rem" id="d-dg-sub">valor diário necessário</div>
+      <div style="color:var(--muted);font-size:.8rem;margin-top:.2rem" id="d-dg-sub"></div>
     </div>
-    <div class="dg-value" id="d-dg-val" style="color: var(--warning);">R$ 29.819</div>
+    <div class="dg-value" id="d-dg-val"></div>
   </div>
   <div>
     <div class="section-title">Vendas por semana</div>
-    <div class="week-grid" id="d-weeks"><div class="week-card"><div class="wk-label">1ª Semana</div><div class="wk-value">R$ 47.822</div></div><div class="week-card"><div class="wk-label">2ª Semana</div><div class="wk-value">R$ 19.840</div></div><div class="week-card"><div class="wk-label">3ª Semana</div><div class="wk-value">R$ 0</div></div><div class="week-card"><div class="wk-label">4ª Semana</div><div class="wk-value">R$ 0</div></div></div>
+    <div class="week-grid" id="d-weeks"></div>
   </div>
   <div>
     <div class="section-title">Clientes &amp; Orçamentos</div>
-    <div class="kpi-grid" id="d-clients"><div class="kpi-card neutral"><div class="kpi-label">Meta de Clientes</div><div class="kpi-value" style="">81</div></div><div class="kpi-card neutral"><div class="kpi-label">Clientes Compraram</div><div class="kpi-value" style="">13</div></div><div class="kpi-card neutral"><div class="kpi-label">Qtd. Orçamentos</div><div class="kpi-value" style="">55</div></div><div class="kpi-card neutral"><div class="kpi-label">Total Orçado</div><div class="kpi-value" style="">R$ 402.708</div></div><div class="kpi-card "><div class="kpi-label">Conversão/Mês</div><div class="kpi-value" style="color:rgb(253,191,124)">33.1%</div></div></div>
+    <div class="kpi-grid" id="d-clients"></div>
   </div>
-  <div class="updated-at" id="d-updated">Atualizado em 07/07/2026, 09:00:30</div>
+  <div class="updated-at" id="d-updated">Atualizado em 08/07/2026, 08:58:14</div>
 </div>
 
 <script>
@@ -220,7 +220,8 @@ const SENHAS = {
   "VERIDIANA DE SOUZA AZEREDO": "9656",
   "WILLIAMS SANTOS DE ANDRADE": "8720",
   "WILMA GERENTE": "3229",
-  "MELISSA BARBOSA MENDES": "4471"
+  "MELISSA BARBOSA MENDES": "4471",
+  "RAFAEL FERREIRA": "3856"
 };
 // ════════════════════════════════════════════════════════════
 
