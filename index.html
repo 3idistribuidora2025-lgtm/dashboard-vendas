@@ -110,6 +110,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .metas-novos-table .mn-row{padding:.7rem 1rem;font-size:.88rem;border-top:1px solid rgba(255,255,255,.07);color:var(--text)}
 .metas-novos-table .mn-row.right{text-align:right;font-family:var(--font);font-weight:600;color:var(--azul-bd)}
 .updated-at{font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;font-family:var(--font)}
+.btn-export{background:rgba(16,168,142,.15);border:1px solid var(--teal-md);border-radius:8px;padding:.5rem 1rem;color:#5fe0c5;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s;font-family:var(--font);display:flex;align-items:center;gap:6px}
+.btn-export:hover{background:rgba(16,168,142,.25)}
+.header-actions{display:flex;gap:.6rem;flex-wrap:wrap}
 @media(max-width:480px){
   #dash{padding:1rem 1rem 2rem}
   .pin-digit{width:56px;height:64px;font-size:1.7rem}
@@ -165,7 +168,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <div class="seller-id" id="d-team">Equipe SP</div>
       <h2 id="d-name">Diego Sampaio</h2>
     </div>
-    <button class="btn-back" onclick="logout()">← Sair</button>
+    <div class="header-actions">
+      <button class="btn-export" onclick="exportarExcel()">⬇ Exportar Excel</button>
+      <button class="btn-back" onclick="logout()">← Sair</button>
+    </div>
   </div>
   <div class="status-banner warn" id="d-banner"><div class="dot"></div><span id="d-status">Fora do Relógio</span></div>
   <div class="progress-section">
@@ -200,6 +206,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
+// ════════════════════════════════════════════════════════════
+// Biblioteca de exportação para Excel (SheetJS)
+// ════════════════════════════════════════════════════════════
+(function loadXLSX() {
+  const sources = [
+    'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+    'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+  ];
+  let i = 0;
+  function tryNext() {
+    if (i >= sources.length) return;
+    const s = document.createElement('script');
+    s.src = sources[i];
+    s.onerror = () => { i++; tryNext(); };
+    document.head.appendChild(s);
+  }
+  tryNext();
+})();
+
 // ════════════════════════════════════════════════════════════
 // CONFIGURAÇÃO — troque pelo ID da sua planilha do Google Sheets
 // ════════════════════════════════════════════════════════════
@@ -236,6 +262,7 @@ const SENHAS = {
 // ════════════════════════════════════════════════════════════
 
 let DATA = {}; // será preenchido a partir da planilha
+let CURRENT_SELLER = null; // vendedor atualmente exibido no dashboard (usado na exportação)
 
 async function fetchCSV(aba) {
   const url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(aba)}&t=${Date.now()}`;
@@ -499,6 +526,7 @@ function logout() {
 }
 
 function renderDash(d) {
+  CURRENT_SELLER = d;
   document.getElementById('d-team').textContent = 'Equipe ' + d.equipe;
   document.getElementById('d-name').textContent = toTitle(d.nome);
 
@@ -597,6 +625,51 @@ function fmt(v) {
 }
 function toTitle(s) {
   return s.toLowerCase().replace(/\b\w/g, c=>c.toUpperCase());
+}
+
+function exportarExcel() {
+  if (!CURRENT_SELLER) { alert('Nenhum vendedor carregado ainda.'); return; }
+  if (typeof XLSX === 'undefined') { alert('A biblioteca de exportação ainda está carregando, tente de novo em alguns segundos.'); return; }
+  const d = CURRENT_SELLER;
+
+  // Aba 1 — Resumo
+  const resumo = [
+    ['Vendedor', toTitle(d.nome)],
+    ['Equipe', d.equipe || '—'],
+    ['Status', d.status || '—'],
+    ['Ranking', d.ranking > 0 ? '#' + d.ranking : '—'],
+    [],
+    ['Meta', d.meta || 0],
+    ['Faturado', d.faturado || 0],
+    ['Aguardando Faturar', d.aguFaturar || 0],
+    ['Vendas Total', d.total || 0],
+    ['% da Meta', d.meta > 0 ? +(d.icm * 100).toFixed(1) : 0],
+    ['GAP da Meta', d.gap || 0],
+    ['Meta do Dia', d.metaDia || 0],
+    [],
+    ['Meta de Clientes', d.metaCli || 0],
+    ['Clientes Compraram', d.qtdCli || 0],
+    ['Clientes Novos Abertos', d.cliAbertos || 0],
+    ['Qtd. Orçamentos', d.orcQtd || 0],
+    ['Total Orçado', d.orcTot || 0],
+    ['Conversão/Mês', d.conv > 0 ? +(d.conv * 100).toFixed(1) : 0],
+  ];
+
+  const wb = XLSX.utils.book_new();
+  const wsResumo = XLSX.utils.aoa_to_sheet(resumo);
+  wsResumo['!cols'] = [{ wch: 22 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
+
+  // Aba 2 — Vendas por semana
+  const semanas = (d.semanas || []).map((v, i) => [`${i + 1}ª Semana`, v]);
+  if (semanas.length) {
+    const wsSemanas = XLSX.utils.aoa_to_sheet([['Semana', 'Total Vendido'], ...semanas]);
+    wsSemanas['!cols'] = [{ wch: 14 }, { wch: 16 }];
+    XLSX.utils.book_append_sheet(wb, wsSemanas, 'Vendas por Semana');
+  }
+
+  const nomeArquivo = `vendas_${d.nome.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.xlsx`;
+  XLSX.writeFile(wb, nomeArquivo);
 }
 
 // Inicia o carregamento ao abrir a página
