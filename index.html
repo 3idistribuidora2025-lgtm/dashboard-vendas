@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)file:///C:/Users/Suporte/Downloads/index_vendedores_ajustado_16.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meus Números</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+:root {
+  --azul:      #1A65B8;
+  --azul-md:   #2577CC;
+  --azul-lt:   #F0F4F8;
+  --azul-dk:   #0F4A8A;
+  --azul-bd:   #7AB4E8;
+  --teal:      #0A856E;
+  --teal-md:   #10A88E;
+  --teal-lt:   #EBF7F4;
+  --navy:      #0E1E35;
+  --navy-md:   #172D4E;
+  --silver:    #F4F5F7;
+  --slate:     #64748B;
+  --gray-dk:   #1C1C1B;
+  --gray-md:   #444441;
+  --gray:      #888780;
+  --gray-lt:   #F5F4EF;
+  --gray-bd:   #D3D1C7;
+  --white:     #FFFFFF;
+  --coral:     #993C1D;
+  --coral-lt:  #FAECE7;
+  --amber:     #854F0B;
+  --amber-md:  #BA7517;
+  --amber-lt:  #FAEEDA;
+  --font:      'Sora', sans-serif;
+  --serif:     'DM Serif Display', serif;
+
+  /* aliases para manter a logica visual do dashboard */
+  --bg:#0E1E35; --surface:#172D4E; --border:rgba(255,255,255,.12);
+  --accent:var(--azul-md); --accent2:var(--teal-md); --danger:var(--coral);
+  --warning:var(--amber-md); --text:#fff; --muted:rgba(255,255,255,.55); --card:#172D4E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+
+.app-header{background:#0D1117;padding:0 1.5rem;display:flex;align-items:center;gap:10px;height:56px;border-bottom:1px solid rgba(255,255,255,.07)}
+.logo-box{width:32px;height:32px;background:#fff;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.logo-img{width:36px;height:36px;border-radius:6px;object-fit:cover}
+.logo-text{font-size:13px;font-weight:600;color:#fff}
+.logo-sub{font-size:10.5px;color:rgba(255,255,255,.5);margin-top:1px}
+
+#loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);gap:1rem;color:var(--muted);font-size:.9rem}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--azul-bd);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#load-error{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);gap:1rem;padding:2rem;text-align:center}
+#load-error h2{color:var(--coral);font-size:1.2rem;font-family:var(--serif);font-weight:400}
+#load-error p{color:var(--muted);font-size:.9rem;max-width:400px}
+.btn-retry{background:var(--azul-md);color:#fff;border:none;border-radius:8px;padding:.6rem 1.5rem;font-size:.9rem;font-weight:600;cursor:pointer;font-family:var(--font)}
+
+#login{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100vh - 56px);padding:2rem;gap:2rem;position:relative;overflow:hidden}
+#login::after{content:'';position:absolute;right:-80px;top:-80px;width:340px;height:340px;background:rgba(255,255,255,.035);border-radius:50%;pointer-events:none}
+.brand{font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:8px}
+.brand::before{content:'';display:inline-block;width:16px;height:2px;background:var(--azul-bd)}
+.login-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;display:flex;flex-direction:column;gap:1.5rem;position:relative;z-index:1}
+.login-box h1{font-family:var(--serif);font-size:1.8rem;font-weight:400;line-height:1.2;color:#fff}
+.login-box h1 em{color:var(--azul-bd);font-style:italic}
+.login-box p{color:rgba(255,255,255,.55);font-size:.9rem;margin-top:-.5rem}
+.pin-wrap{display:flex;gap:.75rem;justify-content:center}
+.pin-digit{width:64px;height:72px;background:rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.15);border-radius:12px;font-family:var(--font);font-size:2rem;font-weight:500;color:#fff;text-align:center;outline:none;transition:border-color .2s;-webkit-text-security:disc}
+.pin-digit:focus{border-color:var(--azul-bd)}
+.btn-enter{background:var(--azul-md);color:#fff;border:none;border-radius:10px;padding:.85rem;font-size:1rem;font-weight:600;cursor:pointer;transition:opacity .2s;width:100%;font-family:var(--font)}
+.btn-enter:hover{opacity:.85}
+.error-msg{color:#ff9b8a;font-size:.85rem;text-align:center;min-height:1.2em}
+
+#dash{display:none;flex-direction:column;min-height:calc(100vh - 56px);padding:1.5rem 1.5rem 3rem;max-width:960px;margin:0 auto;gap:1.5rem}
+.dash-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.seller-id{font-size:.68rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--azul-bd)}
+.dash-header h2{font-family:var(--serif);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:400;text-transform:capitalize;color:#fff}
+.btn-back{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:.5rem 1rem;color:rgba(255,255,255,.7);font-size:.85rem;font-weight:500;cursor:pointer;transition:color .2s,border-color .2s;font-family:var(--font)}
+.btn-back:hover{color:#fff;border-color:rgba(255,255,255,.35)}
+.status-banner{border-radius:12px;padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;font-weight:600;font-size:.95rem}
+.status-banner.ok{background:rgba(16,168,142,.12);border:1px solid var(--teal-md);color:#5fe0c5}
+.status-banner.warn{background:rgba(186,117,23,.14);border:1px solid var(--amber-md);color:#f3b96a}
+.dot{width:10px;height:10px;border-radius:50%;background:currentColor;flex-shrink:0}
+.progress-section{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1.5rem}
+.progress-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem}
+.prog-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.prog-pct{font-family:var(--font);font-size:1.4rem;font-weight:700}
+.progress-track{background:rgba(255,255,255,.1);border-radius:100px;height:10px;overflow:hidden}
+.progress-fill{height:100%;border-radius:100px;transition:width .8s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,var(--azul-md),var(--teal-md))}
+.progress-fill.danger{background:linear-gradient(90deg,var(--coral),var(--amber-md))}
+.progress-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.75rem;color:rgba(255,255,255,.5);font-family:var(--font)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.75rem}
+.kpi-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1.25rem}
+.kpi-card.highlight{border-color:var(--azul-md)}
+.kpi-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.5rem}
+.kpi-value{font-family:var(--font);font-size:1.4rem;font-weight:600;line-height:1;color:#fff}
+.kpi-sub{font-size:.75rem;color:rgba(255,255,255,.45);margin-top:.35rem}
+.good .kpi-value{color:#5fe0c5}
+.bad .kpi-value{color:#ff9b8a}
+.day-goal{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
+.dg-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.dg-value{font-family:var(--font);font-size:1.6rem;font-weight:700;color:#f3b96a}
+.section-title{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.75rem}
+.week-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem}
+.week-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.85rem 1rem}
+.wk-label{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:.3rem}
+.wk-value{font-family:var(--font);font-size:1rem;font-weight:600;color:#fff}
+.metas-novos-table{display:grid;grid-template-columns:1fr auto;gap:0;border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden}
+.metas-novos-table .mn-header{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5);padding:.6rem 1rem;background:rgba(255,255,255,.06)}
+.metas-novos-table .mn-row{padding:.7rem 1rem;font-size:.88rem;border-top:1px solid rgba(255,255,255,.07);color:var(--text)}
+.metas-novos-table .mn-row.right{text-align:right;font-family:var(--font);font-weight:600;color:var(--azul-bd)}
+.updated-at{font-size:.7rem;color:rgba(255,255,255,.35);text-align:center;font-family:var(--font)}
+.btn-export{background:rgba(16,168,142,.15);border:1px solid var(--teal-md);border-radius:8px;padding:.5rem 1rem;color:#5fe0c5;font-size:.85rem;font-weight:600;cursor:pointer;transition:background .2s;font-family:var(--font);display:flex;align-items:center;gap:6px}
+.btn-export:hover{background:rgba(16,168,142,.25)}
+.header-actions{display:flex;gap:.6rem;flex-wrap:wrap}
+.kpi-card.clickable{cursor:pointer;transition:border-color .2s,background .2s}
+.kpi-card.clickable:hover{border-color:var(--azul-bd);background:rgba(255,255,255,.07)}
+.kpi-card.clickable .kpi-label{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.kpi-card.clickable .kpi-label::after{content:'→';color:var(--azul-bd);font-weight:700}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.open{display:flex}
+.modal-box{background:var(--navy-md);border:1px solid rgba(255,255,255,.12);border-radius:16px;max-width:480px;width:100%;max-height:80vh;overflow-y:auto;padding:1.5rem}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.modal-header h3{font-family:var(--serif);font-weight:400;font-size:1.3rem;color:#fff}
+.modal-close{background:rgba(255,255,255,.08);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:1rem;line-height:1}
+.modal-close:hover{background:rgba(255,255,255,.18)}
+.modelo-row{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:.88rem}
+.modelo-row:last-child{border-bottom:none}
+.modelo-nome{color:rgba(255,255,255,.8);padding-right:1rem}
+.modelo-qtd{font-family:var(--font);font-weight:700;color:var(--azul-bd);flex-shrink:0}
+.modal-empty{color:var(--muted);font-size:.85rem;text-align:center;padding:1rem 0}
+@media(max-width:480px){
+  #dash{padding:1rem 1rem 2rem}
+  .pin-digit{width:56px;height:64px;font-size:1.7rem}
+}
+</style>
+<script src="./Meus Números_files/xlsx.full.min.js.download"></script></head>
+<body>
+
+<div class="app-header">
+  <div class="logo-box"><div class="logo-img" style="background:#fff"></div></div>
+  <div>
+    <div class="logo-text">3i Distribuidora</div>
+    <div class="logo-sub">Dashboard de Vendas</div>
+  </div>
+</div>
+
+<!-- TELA DE CARREGAMENTO -->
+<div id="loading">
+  <div class="spinner"></div>
+  <div>Carregando dados da planilha...</div>
+</div>
+
+<!-- TELA DE ERRO -->
+<div id="load-error">
+  <h2>Não foi possível carregar os dados</h2>
+  <p id="error-detail">Verifique se a planilha está compartilhada como "qualquer pessoa com o link pode ver".</p>
+  <button class="btn-retry" onclick="location.reload()">Tentar de novo</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="brand">3i Distribuidora</div>
+  <div class="login-box">
+    <div>
+      <h1>Seus <em>números</em></h1>
+      <p>Digite sua senha de 4 dígitos</p>
+    </div>
+    <div class="pin-wrap">
+      <input class="pin-digit" id="p0" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+      <input class="pin-digit" id="p1" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+      <input class="pin-digit" id="p2" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+      <input class="pin-digit" id="p3" maxlength="1" inputmode="numeric" pattern="[0-9]" autocomplete="off">
+    </div>
+    <div class="error-msg" id="err"></div>
+    <button class="btn-enter" onclick="tryLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dash" style="display: none;">
+  <div class="dash-header">
+    <div>
+      <div class="seller-id" id="d-team">Equipe SP</div>
+      <h2 id="d-name">Diego Sampaio</h2>
+    </div>
+    <div class="header-actions">
+      <button class="btn-export" onclick="exportarExcel()">⬇ Exportar Excel</button>
+      <button class="btn-back" onclick="logout()">← Sair</button>
+    </div>
+  </div>
+  <div class="status-banner warn" id="d-banner"><div class="dot"></div><span id="d-status">Fora do Relógio</span></div>
+  <div class="progress-section">
+    <div class="progress-header">
+      <span class="prog-label">Meta do mês</span>
+      <span class="prog-pct" id="d-pct">26.0%</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill danger" id="d-fill" style="width: 25.9983%;"></div></div>
+    <div class="progress-labels"><span id="d-fat-lbl">Faturado: R$ 5.200</span><span id="d-meta-lbl">Meta: R$ 20.000</span></div>
+  </div>
+  <div class="kpi-grid" id="d-kpis"></div>
+  <div class="day-goal" id="d-daygoal" style="display: none;">
+    <div>
+      <div class="dg-label">Meta do dia</div>
+      <div style="color:var(--muted);font-size:.8rem;margin-top:.2rem" id="d-dg-sub"></div>
+    </div>
+    <div class="dg-value" id="d-dg-val"></div>
+  </div>
+  <div>
+    <div class="section-title">Vendas por semana</div>
+    <div class="week-grid" id="d-weeks"></div>
+  </div>
+  <div>
+    <div class="section-title">Clientes &amp; Orçamentos</div>
+    <div class="kpi-grid" id="d-clients"></div>
+  </div>
+  <div id="d-maquinas-wrap">
+    <div class="section-title">Máquinas Vendidas</div>
+    <div class="kpi-grid" id="d-maquinas"></div>
+  </div>
+  <div id="d-metas-novos-wrap">
+    <div class="section-title">Meta de Clientes Novos</div>
+    <div class="metas-novos-table" id="d-metas-novos"></div>
+  </div>
+  <div class="updated-at" id="d-updated">Atualizado em 09/07/2026, 15:25:33</div>
+</div>
+
+<!-- MODAL: DETALHAMENTO DE MÁQUINAS VENDIDAS -->
+<div class="modal-overlay" id="modal-maquinas" onclick="if(event.target===this) fecharModalMaquinas()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>Máquinas por modelo</h3>
+      <button class="modal-close" onclick="fecharModalMaquinas()">✕</button>
+    </div>
+    <div id="modal-maquinas-body"></div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════
+// Biblioteca de exportação para Excel (SheetJS)
+// ════════════════════════════════════════════════════════════
+(function loadXLSX() {
+  const sources = [
+    'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js',
+    'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+  ];
+  let i = 0;
+  function tryNext() {
+    if (i >= sources.length) return;
+    const s = document.createElement('script');
+    s.src = sources[i];
+    s.onerror = () => { i++; tryNext(); };
+    document.head.appendChild(s);
+  }
+  tryNext();
+})();
+
+// ════════════════════════════════════════════════════════════
+// CONFIGURAÇÃO — troque pelo ID da sua planilha do Google Sheets
+// ════════════════════════════════════════════════════════════
+const SHEET_ID = "1LVypMf3e4TGDtcYa7p9z6Po3Ku3ZDCjSbMVh6V14xcA";
+const ABA_MENSAL = "Mensal";
+const ABA_SEMANAL = "Semanal";
+const ABA_MAQUINAS = "Máquinas Vendidas";
+// Apps Script proxy — resolve bloqueio CORS do Google Sheets
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1n4coHQrBLA6pNAIfcmG923EGZniVwM3skUJHCOJ27MS34y6mbe1NqE6WV14alIxwQg/exec";
+
+// Senhas fixas por vendedor (mesma lógica de antes - 4 dígitos, nunca mudam)
+const SENHAS = {
+  "ANA CRISTINA WRUCH": "6022",
+  "ANASTÁZIA BERNARDINO MOREIRA": "7680",
+  "CHARLES FERREIRA LACAVA": "4025",
+  "DIEGO SAMPAIO": "0165",
+  "FLAVIO MACHADO DOS REIS": "2580",
+  "GISELE PRIEBE PINHEIRO": "8631",
+  "JONATAN AZEVEDO DE SOUZA": "9300",
+  "JOSE ANTONIO OLIVEIRA": "8687",
+  "KELLY MAYANA OLIVEIRA": "5935",
+  "MATEUS OSTROWSKI": "8685",
+  "MATHEUS ALMEIDA DE OLIVEIRA": "7022",
+  "MIQUÉIAS DOS SANTOS DA GAMA": "0212",
+  "NAIARA VAZ": "6332",
+  "VAGNER TAVARES KULZER": "2966",
+  "VANESSA VIEGAS SCHLEMMER": "1713",
+  "VERIDIANA DE SOUZA AZEREDO": "9656",
+  "WILLIAMS SANTOS DE ANDRADE": "8720",
+  "WILMA GERENTE": "3229",
+  "MELISSA BARBOSA MENDES": "4471",
+  "RAFAEL FERREIRA": "3856",
+  "RUBENS DE MATOS SANTOS": "7143"
+};
+// ════════════════════════════════════════════════════════════
+
+let DATA = {}; // será preenchido a partir da planilha
+let CURRENT_SELLER = null; // vendedor atualmente exibido no dashboard (usado na exportação)
+
+async function fetchCSV(aba) {
+  const url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(aba)}&t=${Date.now()}`;
+  const res = await fetch(url, { cache: 'no-store' });
+  if (!res.ok) throw new Error(`HTTP ${res.status} ao buscar aba "${aba}"`);
+  return await res.text();
+}
+
+// Parser de CSV simples que respeita aspas e vírgulas dentro de campos
+function parseCSV(text) {
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i+1] === '"') { field += '"'; i++; }
+        else inQuotes = false;
+      } else field += c;
+    } else {
+      if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+      else if (c === '\r') { /* ignora */ }
+      else field += c;
+    }
+  }
+  if (field.length > 0 || row.length > 0) { row.push(field); rows.push(row); }
+  return rows;
+}
+
+function toNumber(v) {
+  if (v == null) return 0;
+  const s = String(v).trim();
+  if (s === '' || s === '—' || s === '-') return 0;
+  if (!s.includes(',') && !s.includes('R$')) {
+    const n = parseFloat(s);
+    return isNaN(n) ? 0 : n;
+  }
+  const cleaned = s.replace(/[R$\s]/g, '').replace(/\./g, '').replace(',', '.');
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? 0 : n;
+}
+
+function toPercent(v) {
+  if (v == null) return 0;
+  const s = String(v).trim();
+  if (s === '' || s === '—') return 0;
+  const cleaned = s.replace('%', '').replace(',', '.');
+  const n = parseFloat(cleaned);
+  return isNaN(n) ? 0 : n;
+}
+
+async function carregarMensal() {
+  const text = await fetchCSV(ABA_MENSAL);
+  const rows = parseCSV(text);
+
+  let headerRowIdx = -1;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].some(c => String(c).trim().toLowerCase() === 'vendedor')) { headerRowIdx = i; break; }
+  }
+  if (headerRowIdx === -1) throw new Error('Cabeçalho "Vendedor" não encontrado na aba Mensal');
+
+  const headers = rows[headerRowIdx].map(h => String(h).trim());
+  const colIdx = (nameContains) => headers.findIndex(h => h.toLowerCase().includes(nameContains.toLowerCase()));
+
+  const iEquipe = colIdx('equipe');
+  const iVendedor = colIdx('vendedor');
+  const iRanking = colIdx('ranking');
+  const iMeta = headers.findIndex(h => h.toLowerCase().trim() === 'meta');
+  const iFat = colIdx('faturado');
+  const iVA = headers.findIndex(h => h.trim().toUpperCase() === 'VA');
+  const iAguFat = colIdx('aguardando faturar');
+  const iTotal = colIdx('vendas total');
+  const iICM = headers.findIndex(h => h.trim().toUpperCase() === 'ICM');
+  const iStatus = colIdx('status');
+  const iGap = headers.findIndex(h => h.trim().toUpperCase() === 'GAP');
+  const iMetaCli = colIdx('meta de clientes');
+  const iQtdCli = colIdx('qtd de clientes que compraram');
+  const iCliAbertos = colIdx('qtd de clientes abertos');
+  const iOrcQtd = colIdx('qtd orçamentos');
+  const iOrcTot = colIdx('total orçado');
+  const iConv = colIdx('conversão');
+  const iMetaDia = colIdx('meta do dia');
+
+  const sellers = {};
+  for (let r = headerRowIdx + 1; r < rows.length; r++) {
+    const row = rows[r];
+    const nome = String(row[iVendedor] || '').trim();
+    if (!nome || nome.toLowerCase().includes('totais')) continue;
+
+    sellers[nome] = {
+      nome,
+      equipe: String(row[iEquipe] || '').trim(),
+      ranking: parseInt(row[iRanking]) || 0,
+      meta: toNumber(row[iMeta]),
+      faturado: toNumber(row[iFat]),
+      va: toNumber(row[iVA]),
+      aguFaturar: toNumber(row[iAguFat]),
+      total: toNumber(row[iTotal]),
+      icm: toPercent(row[iICM]),
+      status: String(row[iStatus] || '').trim(),
+      gap: toNumber(row[iGap]),
+      metaCli: toNumber(row[iMetaCli]),
+      qtdCli: toNumber(row[iQtdCli]),
+      cliAbertos: toNumber(row[iCliAbertos]),
+      orcQtd: toNumber(row[iOrcQtd]),
+      orcTot: toNumber(row[iOrcTot]),
+      conv: toPercent(row[iConv]),
+      metaDia: toNumber(row[iMetaDia]),
+      semanas: [],
+    };
+  }
+  return sellers;
+}
+
+async function carregarSemanal(sellers) {
+  let text;
+  try {
+    text = await fetchCSV(ABA_SEMANAL);
+  } catch (e) { return; } // aba semanal é opcional, não quebra o resto
+
+  const rows = parseCSV(text);
+
+  const blocos = [];
+  for (let r = 0; r < rows.length; r++) {
+    for (let c = 0; c < rows[r].length; c++) {
+      const v = String(rows[r][c] || '').trim();
+      if (/^\d+ª Semana$/.test(v)) blocos.push({ label: v, row: r, col: c });
+    }
+  }
+  blocos.sort((a, b) => a.label.localeCompare(b.label, 'pt-BR'));
+
+  for (const bloco of blocos) {
+    const headerRow = bloco.row + 1;
+    if (!rows[headerRow]) continue;
+
+    const proximosNaLinha = blocos
+      .filter(b => b.row === bloco.row && b.col > bloco.col)
+      .map(b => b.col);
+    const limiteCol = proximosNaLinha.length > 0 ? Math.min(...proximosNaLinha) : rows[headerRow].length;
+
+    let colVendedor = -1, colTotal = -1;
+    for (let c = bloco.col; c < limiteCol; c++) {
+      const v = String(rows[headerRow][c] || '').trim().toLowerCase();
+      if (v === 'vendedor') colVendedor = c;
+      if (v.includes('total') && v.includes('semana')) colTotal = c;
+    }
+    if (colVendedor === -1 || colTotal === -1) continue;
+
+    for (let r = headerRow + 1; r < rows.length; r++) {
+      const nome = String(rows[r][colVendedor] || '').trim();
+      if (!nome) break;
+      if (nome.toLowerCase().includes('total geral')) break;
+      if (sellers[nome]) {
+        sellers[nome].semanas.push(toNumber(rows[r][colTotal]));
+      }
+    }
+  }
+}
+
+function montarLookup(sellers) {
+  const lookup = {};
+  for (const nome in sellers) {
+    const senha = SENHAS[nome];
+    if (!senha) continue;
+    lookup[senha] = sellers[nome];
+  }
+  return lookup;
+}
+
+async function carregarMaquinas(sellers) {
+  let text;
+  try {
+    text = await fetchCSV(ABA_MAQUINAS);
+  } catch (e) { return; } // aba opcional, não quebra o resto
+
+  const rows = parseCSV(text);
+
+  let headerRowIdx = -1;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].some(c => String(c).trim().toLowerCase() === 'vendedor')) { headerRowIdx = i; break; }
+  }
+  if (headerRowIdx === -1) return;
+
+  const headers = rows[headerRowIdx].map(h => String(h).trim());
+  const colIdx = (nameContains) => headers.findIndex(h => h.toLowerCase().includes(nameContains.toLowerCase()));
+
+  const iVendedor   = colIdx('vendedor');
+  const iMetaMaq    = headers.findIndex(h => h.toLowerCase().trim() === 'meta');
+  const iTotalMaq   = colIdx('total máquinas');
+  const iTotalValor = colIdx('total valor');
+
+  // Colunas de modelos individuais: tudo entre "Meta" e "Total Máquinas vendidas"
+  const modeloCols = [];
+  for (let c = iMetaMaq + 1; c < iTotalMaq; c++) {
+    if (headers[c]) modeloCols.push({ col: c, nome: headers[c] });
+  }
+
+  for (let r = headerRowIdx + 1; r < rows.length; r++) {
+    const row = rows[r];
+    const nome = String(row[iVendedor] || '').trim();
+    if (!nome || nome.toLowerCase().includes('totais')) continue;
+    if (sellers[nome]) {
+      sellers[nome].maqVendidas = toNumber(row[iTotalMaq]);
+      sellers[nome].maqMeta     = toNumber(row[iMetaMaq]);
+      sellers[nome].maqValor    = toNumber(row[iTotalValor]);
+      sellers[nome].maqModelos  = modeloCols
+        .map(mc => ({ modelo: mc.nome, qtd: toNumber(row[mc.col]) }))
+        .filter(m => m.qtd > 0)
+        .sort((a,b) => b.qtd - a.qtd);
+    }
+  }
+}
+
+let METAS_NOVOS = [];
+
+async function carregarMetasNovos() {
+  try {
+    const text = await fetchCSV('Meta clientes novos');
+    const rows = parseCSV(text);
+    METAS_NOVOS = [];
+    for (let r = 0; r < rows.length; r++) {
+      const faixa = String(rows[r][0] || '').trim();
+      const qtd = parseInt(rows[r][1]);
+      if (faixa && !isNaN(qtd) && !faixa.toLowerCase().includes('meta') && !faixa.toLowerCase().includes('etinerante')) {
+        METAS_NOVOS.push({ faixa, qtd });
+      }
+    }
+  } catch(e) { /* opcional, não quebra o resto */ }
+}
+
+async function iniciar(tentativa = 1) {
+  try {
+    const sellers = await carregarMensal();
+    await carregarSemanal(sellers);
+    await carregarMaquinas(sellers);
+    await carregarMetasNovos();
+
+    // Acesso direto por vendedor via link (usado pela lista da diretoria) — sem senha
+    const paramsUrl = new URLSearchParams(window.location.search);
+    const vendedorParam = paramsUrl.get('v');
+    if (vendedorParam && sellers[vendedorParam]) {
+      document.getElementById('loading').style.display = 'none';
+      renderDash(sellers[vendedorParam]);
+      return;
+    }
+
+    DATA = montarLookup(sellers);
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('login').style.display = 'flex';
+    document.getElementById('d-updated').textContent =
+      'Atualizado em ' + new Date().toLocaleString('pt-BR');
+  } catch (err) {
+    console.error('Tentativa', tentativa, err);
+    if (tentativa < 3) {
+      setTimeout(() => iniciar(tentativa + 1), 1500);
+      return;
+    }
+    document.getElementById('loading').style.display = 'none';
+    let msg = err.message || 'Erro desconhecido ao carregar a planilha.';
+    if (msg.includes('Failed to fetch')) {
+      msg = 'Não foi possível conectar ao Google Sheets. Verifique sua conexão com a internet, ou se a planilha continua compartilhada como pública.';
+    }
+    document.getElementById('error-detail').textContent = msg;
+    document.getElementById('load-error').style.display = 'flex';
+  }
+}
+
+// ── PIN / Login ──────────────────────────────────────────────
+const pins = [0,1,2,3].map(i => document.getElementById('p'+i));
+pins.forEach((el, i) => {
+  el.addEventListener('input', () => {
+    el.value = el.value.replace(/[^0-9]/g,'').slice(-1);
+    if (el.value && i < 3) pins[i+1].focus();
+    document.getElementById('err').textContent = '';
+  });
+  el.addEventListener('keydown', e => {
+    if (e.key === 'Backspace' && !el.value && i > 0) pins[i-1].focus();
+    if (e.key === 'Enter') tryLogin();
+  });
+});
+
+function tryLogin() {
+  const pwd = pins.map(p => p.value).join('');
+  if (pwd.length < 4) { setErr('Digite os 4 dígitos'); return; }
+  const d = DATA[pwd];
+  if (!d) { setErr('Senha incorreta'); pins.forEach(p => p.value=''); pins[0].focus(); return; }
+  renderDash(d);
+}
+
+function setErr(msg) { document.getElementById('err').textContent = msg; }
+
+function logout() {
+  const paramsUrl = new URLSearchParams(window.location.search);
+  if (paramsUrl.get('v')) {
+    window.location.href = 'https://3idistribuidora2025-lgtm.github.io/kpis-diretoria/selecionar-vendedor.html';
+    return;
+  }
+  document.getElementById('dash').style.display = 'none';
+  document.getElementById('login').style.display = 'flex';
+  pins.forEach(p => p.value='');
+  pins[0].focus();
+  window.scrollTo(0,0);
+}
+
+function renderDash(d) {
+  CURRENT_SELLER = d;
+  document.getElementById('d-team').textContent = 'Equipe ' + d.equipe;
+  document.getElementById('d-name').textContent = toTitle(d.nome);
+
+  const ok = d.status.toLowerCase().includes('no relógio') || d.status.toLowerCase().includes('no relogio');
+  const banner = document.getElementById('d-banner');
+  banner.className = 'status-banner ' + (ok ? 'ok' : 'warn');
+  document.getElementById('d-status').textContent = d.status || '—';
+
+  const pct = d.meta > 0 ? d.icm * 100 : 0;
+  document.getElementById('d-pct').textContent = d.meta > 0 ? pct.toFixed(1)+'%' : 'Sem meta';
+  const fill = document.getElementById('d-fill');
+  fill.style.width = Math.min(pct, 100) + '%';
+  fill.className = 'progress-fill' + (pct < 50 ? ' danger' : '');
+  document.getElementById('d-fat-lbl').textContent = 'Faturado: ' + fmt(d.faturado);
+  document.getElementById('d-meta-lbl').textContent = 'Meta: ' + fmt(d.meta);
+
+  const kpis = [
+    { label:'Faturado', value:fmt(d.faturado), cls:'neutral highlight' },
+    { label:'Vendas Total', value:fmt(d.total), cls:'neutral', sub:'incl. aguardando faturar' },
+    { label:'Aguard. Faturar', value:fmt(d.aguFaturar), cls:'neutral' },
+    d.va>0 ? { label:'VA', value:fmt(d.va), cls:'neutral' } : null,
+    d.meta > 0 && d.gap <= 0
+      ? { label:'GAP da Meta', value:'Meta batida! 🎉', cls:'good' }
+      : d.meta > 0
+      ? { label:'GAP da Meta', value:fmt(d.gap), cls:'bad', sub:'falta para a meta' }
+      : { label:'GAP da Meta', value:'—', cls:'neutral' },
+    d.ranking > 0 ? { label:'Ranking', value:'#'+d.ranking, cls: d.ranking<=3?'good':'neutral' } : null,
+  ].filter(Boolean);
+
+  document.getElementById('d-kpis').innerHTML = kpis.map(k =>
+    `<div class="kpi-card ${k.cls}"><div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div>${k.sub?`<div class="kpi-sub">${k.sub}</div>`:''}</div>`
+  ).join('');
+
+  const mdv = document.getElementById('d-dg-val');
+  const dg = document.getElementById('d-daygoal');
+  if (d.metaDia && Math.abs(d.metaDia) > 0.5) {
+    mdv.textContent = fmt(Math.abs(d.metaDia));
+    document.getElementById('d-dg-sub').textContent = d.metaDia < 0 ? 'Meta já superada hoje 🎉' : 'valor diário necessário';
+    mdv.style.color = d.metaDia < 0 ? 'var(--accent2)' : 'var(--warning)';
+    dg.style.display = '';
+  } else { dg.style.display = 'none'; }
+
+  const wg = document.getElementById('d-weeks');
+  const semRaw = (d.semanas||[]).slice(0,4);
+  wg.innerHTML = semRaw.length
+    ? semRaw.map((v,i) => `<div class="week-card"><div class="wk-label">${i+1}ª Semana</div><div class="wk-value">${fmt(v)}</div></div>`).join('')
+    : '<p style="color:var(--muted);font-size:.85rem">Sem dados semanais.</p>';
+
+  const cg = document.getElementById('d-clients');
+  const ck = [
+    d.metaCli>0 ? { label:'Meta de Clientes', value:d.metaCli, cls:'neutral' } : null,
+    d.qtdCli>0 ? { label:'Clientes Compraram', value:d.qtdCli, cls: (d.metaCli>0 && d.qtdCli>=d.metaCli)?'good':'neutral' } : null,
+    d.cliAbertos>0 ? { label:'Clientes Novos Abertos', value:d.cliAbertos, cls:'neutral' } : null,
+    d.orcQtd>0 ? { label:'Qtd. Orçamentos', value:d.orcQtd, cls:'neutral' } : null,
+    d.orcTot>0 ? { label:'Total Orçado', value:fmt(d.orcTot), cls:'neutral' } : null,
+    d.conv>0 ? { label:'Conversão/Mês', value:(d.conv*100).toFixed(1)+'%', cls:'', style:`color:${convColor(d.conv)}` } : null,
+  ].filter(Boolean);
+  cg.innerHTML = ck.length
+    ? ck.map(k => `<div class="kpi-card ${k.cls}"><div class="kpi-label">${k.label}</div><div class="kpi-value" style="${k.style||''}">${k.value}</div></div>`).join('')
+    : '<p style="color:var(--muted);font-size:.85rem">Sem dados de clientes.</p>';
+
+  const mqWrap = document.getElementById('d-maquinas-wrap');
+  const mq = document.getElementById('d-maquinas');
+  if (d.maqVendidas != null || d.maqMeta != null) {
+    const maqPct = d.maqMeta > 0 ? (d.maqVendidas || 0) / d.maqMeta : null;
+    const temModelos = (d.maqModelos || []).length > 0;
+    const mk = [
+      { label: 'Máquinas Vendidas', value: d.maqVendidas ?? 0, cls: 'neutral highlight' + (temModelos?' clickable':''), click: temModelos },
+      d.maqMeta ? { label: 'Meta de Máquinas', value: d.maqMeta, cls: 'neutral' } : null,
+      maqPct != null ? { label: '% da Meta', value: (maqPct*100).toFixed(1)+'%', cls: maqPct>=1?'good':'neutral' } : null,
+      d.maqValor ? { label: 'Valor Total', value: fmt(d.maqValor), cls: 'neutral' } : null,
+    ].filter(Boolean);
+    mq.innerHTML = mk.map(k =>
+      `<div class="kpi-card ${k.cls}"${k.click?' onclick="abrirModalMaquinas()"':''}><div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div></div>`
+    ).join('');
+    mqWrap.style.display = '';
+  } else {
+    mqWrap.style.display = 'none';
+  }
+
+  const mnWrap = document.getElementById('d-metas-novos-wrap');
+  const mn = document.getElementById('d-metas-novos');
+  if (METAS_NOVOS.length > 0) {
+    mn.innerHTML =
+      '<div class="mn-header">Faixa de Faturamento do Cliente</div>' +
+      '<div class="mn-header right">Meta de Novos</div>' +
+      METAS_NOVOS.map(m =>
+        `<div class="mn-row">${m.faixa}</div><div class="mn-row right">${m.qtd} cliente${m.qtd !== 1 ? 's' : ''}</div>`
+      ).join('');
+    mnWrap.style.display = '';
+  } else {
+    mnWrap.style.display = 'none';
+  }
+
+  document.getElementById('login').style.display = 'none';
+  document.getElementById('dash').style.display = 'flex';
+  window.scrollTo(0,0);
+}
+
+function convColor(conv) {
+  const pct = Math.max(0, Math.min(1, conv));
+  const red    = [0xF8,0x69,0x6B];
+  const yellow = [0xFF,0xEB,0x84];
+  const green  = [0x63,0xBE,0x7B];
+  let c1, c2, t;
+  if (pct <= 0.5) { c1 = red; c2 = yellow; t = pct / 0.5; }
+  else { c1 = yellow; c2 = green; t = (pct - 0.5) / 0.5; }
+  const rgb = c1.map((v,i) => Math.round(v + (c2[i]-v)*t));
+  return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+}
+
+function fmt(v) {
+  if (!v && v!==0) return '—';
+  return 'R$ ' + Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+function toTitle(s) {
+  return s.toLowerCase().replace(/\b\w/g, c=>c.toUpperCase());
+}
+
+function abrirModalMaquinas() {
+  if (!CURRENT_SELLER) return;
+  const modelos = CURRENT_SELLER.maqModelos || [];
+  const body = document.getElementById('modal-maquinas-body');
+  body.innerHTML = modelos.length
+    ? modelos.map(m => `<div class="modelo-row"><span class="modelo-nome">${m.modelo}</span><span class="modelo-qtd">${m.qtd}</span></div>`).join('')
+    : '<p class="modal-empty">Nenhuma máquina vendida ainda neste mês.</p>';
+  document.getElementById('modal-maquinas').classList.add('open');
+}
+
+function fecharModalMaquinas() {
+  document.getElementById('modal-maquinas').classList.remove('open');
+}
+
+function exportarExcel() {
+  if (!CURRENT_SELLER) { alert('Nenhum vendedor carregado ainda.'); return; }
+  if (typeof XLSX === 'undefined') { alert('A biblioteca de exportação ainda está carregando, tente de novo em alguns segundos.'); return; }
+  const d = CURRENT_SELLER;
+
+  // Aba 1 — Resumo
+  const resumo = [
+    ['Vendedor', toTitle(d.nome)],
+    ['Equipe', d.equipe || '—'],
+    ['Status', d.status || '—'],
+    ['Ranking', d.ranking > 0 ? '#' + d.ranking : '—'],
+    [],
+    ['Meta', d.meta || 0],
+    ['Faturado', d.faturado || 0],
+    ['Aguardando Faturar', d.aguFaturar || 0],
+    ['Vendas Total', d.total || 0],
+    ['% da Meta', d.meta > 0 ? +(d.icm * 100).toFixed(1) : 0],
+    ['GAP da Meta', d.gap || 0],
+    ['Meta do Dia', d.metaDia || 0],
+    [],
+    ['Meta de Clientes', d.metaCli || 0],
+    ['Clientes Compraram', d.qtdCli || 0],
+    ['Clientes Novos Abertos', d.cliAbertos || 0],
+    ['Qtd. Orçamentos', d.orcQtd || 0],
+    ['Total Orçado', d.orcTot || 0],
+    ['Conversão/Mês', d.conv > 0 ? +(d.conv * 100).toFixed(1) : 0],
+    [],
+    ['Máquinas Vendidas', d.maqVendidas || 0],
+    ['Meta de Máquinas', d.maqMeta || 0],
+    ['Valor Total (Máquinas)', d.maqValor || 0],
+  ];
+
+  const wb = XLSX.utils.book_new();
+  const wsResumo = XLSX.utils.aoa_to_sheet(resumo);
+  wsResumo['!cols'] = [{ wch: 22 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, wsResumo, 'Resumo');
+
+  // Aba 2 — Vendas por semana
+  const semanas = (d.semanas || []).map((v, i) => [`${i + 1}ª Semana`, v]);
+  if (semanas.length) {
+    const wsSemanas = XLSX.utils.aoa_to_sheet([['Semana', 'Total Vendido'], ...semanas]);
+    wsSemanas['!cols'] = [{ wch: 14 }, { wch: 16 }];
+    XLSX.utils.book_append_sheet(wb, wsSemanas, 'Vendas por Semana');
+  }
+
+  // Aba 3 — Máquinas por modelo
+  if ((d.maqModelos || []).length) {
+    const wsMaq = XLSX.utils.aoa_to_sheet([['Modelo', 'Quantidade'], ...d.maqModelos.map(m => [m.modelo, m.qtd])]);
+    wsMaq['!cols'] = [{ wch: 55 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, wsMaq, 'Máquinas por Modelo');
+  }
+
+  const nomeArquivo = `vendas_${d.nome.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.xlsx`;
+  XLSX.writeFile(wb, nomeArquivo);
+}
+
+// Inicia o carregamento ao abrir a página
+iniciar();
+</script>
+
+
+
+</body></html>
