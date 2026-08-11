@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<!-- saved from url=(0068)file:///C:/Users/Suporte/Downloads/index_vendedores_ajustado_16.html -->
+<!-- saved from url=(0066)file:///C:/Users/Suporte/Downloads/dashboard_vendedores_3i_21.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -133,7 +134,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   .pin-digit{width:56px;height:64px;font-size:1.7rem}
 }
 </style>
-<script src="./Meus Números_files/xlsx.full.min.js.download"></script></head>
+</head>
 <body>
 
 <div class="app-header">
@@ -294,6 +295,7 @@ const SENHAS = {
 
 let DATA = {}; // será preenchido a partir da planilha
 let CURRENT_SELLER = null; // vendedor atualmente exibido no dashboard (usado na exportação)
+let MES_INFO = {}; // dias úteis, % do mês passado etc. (linhas de topo da aba Mensal)
 
 async function fetchCSV(aba) {
   const url = `${APPS_SCRIPT_URL}?sheet=${encodeURIComponent(aba)}&t=${Date.now()}`;
@@ -350,6 +352,17 @@ function toPercent(v) {
 async function carregarMensal() {
   const text = await fetchCSV(ABA_MENSAL);
   const rows = parseCSV(text);
+
+  // Linhas de topo da planilha: Dias Úteis, Data, Data Final, Dias Restantes, % Dias Passados, ...
+  function parseValTopo(v) {
+    if (!v && v !== 0) return null;
+    const s = v.toString().replace('%','').replace('R$','').replace(/\s/g,'').replace(',','.').trim();
+    const n = parseFloat(s);
+    return isNaN(n) ? null : n;
+  }
+  if (rows[0]) MES_INFO.diasUteis     = parseValTopo(rows[0][3]) ?? 21;
+  if (rows[3]) MES_INFO.diasRestantes = parseValTopo(rows[3][3]) ?? 0;
+  if (rows[4]) MES_INFO.pctPassado    = parseValTopo(rows[4][3]) ?? 0;
 
   let headerRowIdx = -1;
   for (let i = 0; i < rows.length; i++) {
@@ -630,6 +643,7 @@ function renderDash(d) {
       ? { label:'GAP da Meta', value:fmt(d.gap), cls:'bad', sub:'falta para a meta' }
       : { label:'GAP da Meta', value:'—', cls:'neutral' },
     d.ranking > 0 ? { label:'Ranking', value:'#'+d.ranking, cls: d.ranking<=3?'good':'neutral' } : null,
+    MES_INFO.pctPassado != null ? { label:'% Dias Úteis Passados', value:(MES_INFO.pctPassado*100).toFixed(1)+'%', cls:'neutral', sub: MES_INFO.diasRestantes!=null?`${MES_INFO.diasRestantes} dias úteis restantes`:undefined } : null,
   ].filter(Boolean);
 
   document.getElementById('d-kpis').innerHTML = kpis.map(k =>
@@ -795,7 +809,6 @@ function exportarExcel() {
 // Inicia o carregamento ao abrir a página
 iniciar();
 </script>
-
 
 
 </body></html>
