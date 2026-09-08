@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!-- saved from url=(0066)file:///C:/Users/Suporte/Downloads/dashboard_vendedores_3i_21.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -71,7 +70,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .btn-enter:hover{opacity:.85}
 .error-msg{color:var(--coral);font-size:.85rem;text-align:center;min-height:1.2em}
 
-#dash{display:none;flex-direction:column;min-height:calc(100vh - 56px);padding:1.5rem 1.5rem 3rem;max-width:960px;margin:0 auto;gap:2.5rem}
+#dash{display:none;flex-direction:column;min-height:calc(100vh - 56px);padding:2rem 3rem 3rem;max-width:1440px;margin:0 auto;gap:2.5rem;width:100%}
 .dash-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 .seller-id{font-size:.7rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--azul-dk);background:rgba(26,101,184,.14);display:inline-block;padding:.3rem .7rem;border-radius:6px}
 .dash-header h2{font-family:var(--serif);font-size:clamp(1.4rem,3vw,1.9rem);font-weight:400;text-transform:capitalize;color:var(--text)}
@@ -81,31 +80,34 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .status-banner.ok{background:rgba(15,110,86,.16);border:1px solid var(--teal-md);color:var(--teal-md)}
 .status-banner.warn{background:rgba(186,117,23,.18);border:1.5px solid var(--amber-md);color:var(--amber-md);font-weight:700}
 .dot{width:10px;height:10px;border-radius:50%;background:currentColor;flex-shrink:0}
-.progress-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;box-shadow:0 1px 3px rgba(16,36,59,.05)}
+.progress-section{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.75rem 2rem;box-shadow:0 1px 3px rgba(16,36,59,.05)}
 .progress-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1rem}
 .prog-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.prog-pct{font-family:var(--font);font-size:1.4rem;font-weight:700;color:var(--text)}
+.prog-pct{font-family:var(--font);font-size:1.7rem;font-weight:700;color:var(--text)}
 .progress-track{background:var(--border);border-radius:100px;height:10px;overflow:hidden}
 .progress-fill{height:100%;border-radius:100px;transition:width .8s cubic-bezier(.4,0,.2,1);background:linear-gradient(90deg,var(--azul-md),var(--teal-md))}
 .progress-fill.danger{background:linear-gradient(90deg,var(--coral),var(--amber-md))}
 .progress-labels{display:flex;justify-content:space-between;margin-top:.5rem;font-size:.75rem;color:var(--muted);font-family:var(--font)}
-.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.75rem}
-.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.25rem;box-shadow:0 1px 3px rgba(16,36,59,.05)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;box-shadow:0 1px 3px rgba(16,36,59,.05)}
 .kpi-card.highlight{border-color:var(--azul-md)}
 .kpi-card.soft{background:var(--azul-lt)}
-.kpi-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
-.kpi-value{font-family:var(--font);font-size:1.4rem;font-weight:600;line-height:1;color:var(--text)}
+.kpi-card.callout{background:var(--azul);border:none}
+.kpi-card.callout .kpi-label{color:rgba(255,255,255,.85)}
+.kpi-card.callout .kpi-value{color:#FFC857}
+.kpi-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.kpi-value{font-family:var(--font);font-size:1.7rem;font-weight:700;line-height:1;color:var(--text)}
 .kpi-sub{font-size:.75rem;color:var(--muted);margin-top:.35rem}
 .good .kpi-value{color:var(--teal-md)}
 .bad .kpi-value{color:var(--coral)}
-.day-goal{background:var(--azul);border:none;border-radius:14px;padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;box-shadow:0 1px 3px rgba(16,36,59,.08)}
+.day-goal{background:var(--azul);border:none;border-radius:14px;padding:1.5rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;box-shadow:0 1px 3px rgba(16,36,59,.08)}
 .dg-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.85)}
-.dg-value{font-family:var(--font);font-size:1.6rem;font-weight:700;color:#FFC857}
-.section-title{font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--azul-dk);background:rgba(26,101,184,.14);display:inline-block;padding:.35rem .75rem;border-radius:6px;margin-bottom:1.1rem}
-.week-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem}
-.week-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;box-shadow:0 1px 3px rgba(16,36,59,.05)}
-.wk-label{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
-.wk-value{font-family:var(--font);font-size:1rem;font-weight:600;color:var(--text)}
+.dg-value{font-family:var(--font);font-size:2rem;font-weight:700;color:#FFC857}
+.section-title{font-size:.9rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--azul);display:inline-block;padding:.55rem 1rem;border-radius:8px;margin-bottom:1.1rem}
+.week-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
+.week-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.5rem;box-shadow:0 1px 3px rgba(16,36,59,.05)}
+.wk-label{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.wk-value{font-family:var(--font);font-size:1.5rem;font-weight:700;color:var(--text)}
 .metas-novos-table{display:grid;grid-template-columns:1fr auto;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:var(--surface)}
 .metas-novos-table .mn-header{font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:.6rem 1rem;background:var(--azul-lt)}
 .metas-novos-table .mn-row{padding:.7rem 1rem;font-size:.88rem;border-top:1px solid var(--border);color:var(--text)}
@@ -130,6 +132,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 .modelo-nome{color:var(--text);padding-right:1rem}
 .modelo-qtd{font-family:var(--font);font-weight:700;color:var(--azul-bd);flex-shrink:0}
 .modal-empty{color:var(--muted);font-size:.85rem;text-align:center;padding:1rem 0}
+.dash-layout{display:flex;gap:1.5rem;align-items:flex-start}
+.side-menu{display:flex;flex-direction:column;gap:.2rem;width:250px;flex-shrink:0;position:sticky;top:1.5rem;background:#16243B;border:1px solid #16243B;border-radius:16px;padding:.75rem;box-shadow:0 1px 3px rgba(16,36,59,.2)}
+.side-menu-item{display:flex;align-items:center;background:transparent;border:none;border-left:3px solid transparent;border-radius:8px;padding:.9rem 1rem;font-family:var(--font);font-size:.88rem;font-weight:600;color:rgba(255,255,255,.65);cursor:pointer;text-align:left;transition:all .15s}
+.side-menu-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.side-menu-item.active{background:var(--azul-md);border-left-color:#FFC857;color:#fff}
+.dash-content{flex:1;display:flex;flex-direction:column;gap:1.5rem;min-width:0}
+.dash-panel{display:none;flex-direction:column;gap:1.5rem}
+.dash-panel.active{display:flex}
+@media(max-width:768px){
+  .dash-layout{flex-direction:column}
+  .side-menu{flex-direction:row;overflow-x:auto;width:100%;position:static;gap:.25rem;padding-bottom:.3rem}
+  .side-menu-item{flex-shrink:0;white-space:nowrap;border-left:none;border-bottom:3px solid transparent}
+  .side-menu-item.active{border-bottom-color:var(--azul)}
+}
 @media(max-width:480px){
   #dash{padding:1rem 1rem 2rem}
   .pin-digit{width:56px;height:64px;font-size:1.7rem}
@@ -190,44 +206,84 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       <button class="btn-back" onclick="logout()">← Sair</button>
     </div>
   </div>
-  <div class="status-banner warn" id="d-banner"><div class="dot"></div><span id="d-status">Fora do Relógio</span></div>
-  <div class="progress-section">
-    <div class="progress-header">
-      <span class="prog-label">Meta do mês</span>
-      <span class="prog-pct" id="d-pct">26.0%</span>
+
+  <div class="dash-layout">
+    <nav class="side-menu">
+      <button class="side-menu-item active" data-painel="inicio" onclick="showPainel('inicio', this)">Início</button>
+      <button class="side-menu-item" data-painel="semanal" onclick="showPainel('semanal', this)">Vendas por Semana</button>
+      <button class="side-menu-item" data-painel="clientes" onclick="showPainel('clientes', this)">Clientes &amp; Orçamentos</button>
+      <button class="side-menu-item" data-painel="pantum" onclick="showPainel('pantum', this)">Pantum Vendidas</button>
+      <button class="side-menu-item" data-painel="termicas" onclick="showPainel('termicas', this)">Térmicas Vendidas</button>
+      <button class="side-menu-item" data-painel="anual" onclick="showPainel('anual', this)">Meta Anual</button>
+      <button class="side-menu-item" data-painel="metanovos" onclick="showPainel('metanovos', this)">Meta de Clientes Novos</button>
+    </nav>
+
+    <div class="dash-content">
+      <div class="dash-panel active" id="painel-inicio">
+        <div class="status-banner warn" id="d-banner"><div class="dot"></div><span id="d-status">Fora do Relógio</span></div>
+        <div class="progress-section">
+          <div class="progress-header">
+            <span class="prog-label">Meta do mês</span>
+            <span class="prog-pct" id="d-pct">26.0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill danger" id="d-fill" style="width: 25.9983%;"></div></div>
+          <div class="progress-labels"><span id="d-fat-lbl">Faturado: R$ 5.200</span><span id="d-meta-lbl">Meta: R$ 20.000</span></div>
+        </div>
+        <div class="kpi-grid" id="d-kpis"></div>
+        <div class="day-goal" id="d-daygoal" style="display: none;">
+          <div>
+            <div class="dg-label">Meta do dia</div>
+            <div style="color:rgba(255,255,255,.8);font-size:.8rem;margin-top:.2rem" id="d-dg-sub"></div>
+          </div>
+          <div class="dg-value" id="d-dg-val"></div>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="painel-semanal">
+        <div class="section-title">Vendas por semana</div>
+        <div class="week-grid" id="d-weeks"></div>
+      </div>
+
+      <div class="dash-panel" id="painel-clientes">
+        <div class="section-title">Clientes &amp; Orçamentos</div>
+        <div class="kpi-grid" id="d-clients"></div>
+      </div>
+
+      <div class="dash-panel" id="painel-pantum">
+        <div id="d-maquinas-wrap">
+          <div class="section-title">Pantum Vendidas</div>
+          <div class="kpi-grid" id="d-maquinas"></div>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="painel-termicas">
+        <div id="d-termicas-wrap">
+          <div class="section-title">Térmicas Vendidas</div>
+          <div class="kpi-grid" id="d-termicas"></div>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="painel-metanovos">
+        <div id="d-metas-novos-wrap">
+          <div class="section-title">Meta de Clientes Novos</div>
+          <div class="metas-novos-table" id="d-metas-novos"></div>
+        </div>
+      </div>
+
+      <div class="dash-panel" id="painel-anual">
+        <div class="progress-section" id="d-annual-wrap" style="display:none">
+          <div class="progress-header">
+            <span class="prog-label">Meta anual</span>
+            <span class="prog-pct" id="d-annual-pct">0%</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="d-annual-fill" style="width: 0%;"></div></div>
+          <div class="progress-labels"><span id="d-annual-real-lbl">Realizado: R$ 0</span><span id="d-annual-meta-lbl">Meta: R$ 0</span></div>
+        </div>
+      </div>
+
+      <div class="updated-at" id="d-updated">Atualizado em 09/07/2026, 15:25:33</div>
     </div>
-    <div class="progress-track"><div class="progress-fill danger" id="d-fill" style="width: 25.9983%;"></div></div>
-    <div class="progress-labels"><span id="d-fat-lbl">Faturado: R$ 5.200</span><span id="d-meta-lbl">Meta: R$ 20.000</span></div>
   </div>
-  <div class="kpi-grid" id="d-kpis"></div>
-  <div class="day-goal" id="d-daygoal" style="display: none;">
-    <div>
-      <div class="dg-label">Meta do dia</div>
-      <div style="color:rgba(255,255,255,.8);font-size:.8rem;margin-top:.2rem" id="d-dg-sub"></div>
-    </div>
-    <div class="dg-value" id="d-dg-val"></div>
-  </div>
-  <div>
-    <div class="section-title">Vendas por semana</div>
-    <div class="week-grid" id="d-weeks"></div>
-  </div>
-  <div>
-    <div class="section-title">Clientes &amp; Orçamentos</div>
-    <div class="kpi-grid" id="d-clients"></div>
-  </div>
-  <div id="d-maquinas-wrap">
-    <div class="section-title">Pantum Vendidas</div>
-    <div class="kpi-grid" id="d-maquinas"></div>
-  </div>
-  <div id="d-termicas-wrap">
-    <div class="section-title">Térmicas Vendidas</div>
-    <div class="kpi-grid" id="d-termicas"></div>
-  </div>
-  <div id="d-metas-novos-wrap">
-    <div class="section-title">Meta de Clientes Novos</div>
-    <div class="metas-novos-table" id="d-metas-novos"></div>
-  </div>
-  <div class="updated-at" id="d-updated">Atualizado em 09/07/2026, 15:25:33</div>
 </div>
 
 <!-- MODAL: DETALHAMENTO DE PANTUM VENDIDAS -->
@@ -281,6 +337,7 @@ const ABA_MENSAL = "Mensal";
 const ABA_SEMANAL = "Semanal";
 const ABA_MAQUINAS = "Pantum Vendas";
 const ABA_TERMICAS = "Térmicas Vendas";
+const ABA_META_ANUAL = "Meta anual";
 // Apps Script proxy — resolve bloqueio CORS do Google Sheets
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw1n4coHQrBLA6pNAIfcmG923EGZniVwM3skUJHCOJ27MS34y6mbe1NqE6WV14alIxwQg/exec";
 
@@ -583,6 +640,38 @@ async function carregarTermicas(sellers) {
   }
 }
 
+async function carregarMetaAnual(sellers) {
+  let text;
+  try {
+    text = await fetchCSV(ABA_META_ANUAL);
+  } catch (e) { return; } // aba opcional, não quebra o resto
+
+  const rows = parseCSV(text);
+
+  let headerRowIdx = -1;
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].some(c => String(c).trim().toLowerCase() === 'vendedor')) { headerRowIdx = i; break; }
+  }
+  if (headerRowIdx === -1) return;
+
+  const headers = rows[headerRowIdx].map(h => String(h).trim());
+  const colIdx = (nameContains) => headers.findIndex(h => h.toLowerCase().includes(nameContains.toLowerCase()));
+
+  const iVendedor    = colIdx('vendedor');
+  const iMetaAnual   = headers.findIndex(h => h.toLowerCase().trim() === 'meta');
+  const iRealizado   = colIdx('faturado');
+
+  for (let r = headerRowIdx + 1; r < rows.length; r++) {
+    const row = rows[r];
+    const nome = String(row[iVendedor] || '').trim();
+    if (!nome || nome.toLowerCase().includes('totais')) continue;
+    if (sellers[nome]) {
+      sellers[nome].metaAnual      = toNumber(row[iMetaAnual]);
+      sellers[nome].realizadoAnual = toNumber(row[iRealizado]);
+    }
+  }
+}
+
 let METAS_NOVOS = [];
 
 async function carregarMetasNovos() {
@@ -606,6 +695,7 @@ async function iniciar(tentativa = 1) {
     await carregarSemanal(sellers);
     await carregarMaquinas(sellers);
     await carregarTermicas(sellers);
+    await carregarMetaAnual(sellers);
     await carregarMetasNovos();
 
     // Acesso direto por vendedor via link (usado pela lista da diretoria) — sem senha
@@ -678,6 +768,8 @@ function logout() {
 
 function renderDash(d) {
   CURRENT_SELLER = d;
+  const primeiroMenu = document.querySelector('.side-menu-item[data-painel="inicio"]');
+  showPainel('inicio', primeiroMenu);
   document.getElementById('d-team').textContent = 'Equipe ' + d.equipe;
   document.getElementById('d-name').textContent = toTitle(d.nome);
 
@@ -693,6 +785,20 @@ function renderDash(d) {
   fill.className = 'progress-fill' + (pct < 50 ? ' danger' : '');
   document.getElementById('d-fat-lbl').textContent = 'Faturado: ' + fmt(d.faturado);
   document.getElementById('d-meta-lbl').textContent = 'Meta: ' + fmt(d.meta);
+
+  const annualWrap = document.getElementById('d-annual-wrap');
+  if (d.metaAnual > 0) {
+    const pctAnual = (d.realizadoAnual || 0) / d.metaAnual * 100;
+    document.getElementById('d-annual-pct').textContent = pctAnual.toFixed(1) + '%';
+    const annualFill = document.getElementById('d-annual-fill');
+    annualFill.style.width = Math.min(pctAnual, 100) + '%';
+    annualFill.className = 'progress-fill' + (pctAnual < 50 ? ' danger' : '');
+    document.getElementById('d-annual-real-lbl').textContent = 'Realizado: ' + fmt(d.realizadoAnual || 0);
+    document.getElementById('d-annual-meta-lbl').textContent = 'Meta: ' + fmt(d.metaAnual);
+    annualWrap.style.display = '';
+  } else {
+    annualWrap.style.display = 'none';
+  }
 
   const kpis = [
     { label:'Vendas Total', value:fmt(d.total), cls:'neutral highlight', sub:'incl. aguardando faturar' },
@@ -733,7 +839,7 @@ function renderDash(d) {
   const ck = [
     d.metaCli>0 ? { label:'Meta de Clientes', value:d.metaCli, cls:'neutral' } : null,
     d.qtdCli>0 ? { label:'Clientes Compraram', value:d.qtdCli, cls: (d.metaCli>0 && d.qtdCli>=d.metaCli)?'good':'neutral' } : null,
-    d.cliAbertos>0 ? { label:'Clientes Novos Abertos', value:d.cliAbertos, cls:'neutral' } : null,
+    { label:'Clientes Novos Abertos', value:d.cliAbertos || 0, cls:'neutral' },
     d.orcQtd>0 ? { label:'Qtd. Orçamentos', value:d.orcQtd, cls:'neutral' } : null,
     d.orcTot>0 ? { label:'Total Orçado', value:fmt(d.orcTot), cls:'neutral' } : null,
     d.conv>0 ? { label:'Conversão/Mês', value:(d.conv*100).toFixed(1)+'%', cls:'', style:`color:${convColor(d.conv)}` } : null,
@@ -748,8 +854,8 @@ function renderDash(d) {
     const maqPct = d.maqMeta > 0 ? (d.maqVendidas || 0) / d.maqMeta : null;
     const temModelos = (d.maqModelos || []).length > 0;
     const mk = [
-      { label: 'Pantum Vendidas', value: d.maqVendidas ?? 0, cls: 'neutral highlight' + (temModelos?' clickable':''), click: temModelos },
       d.maqMeta ? { label: 'Meta de Pantum', value: d.maqMeta, cls: 'neutral' } : null,
+      { label: 'Pantum Vendidas', value: d.maqVendidas ?? 0, cls: 'neutral' + (temModelos?' clickable':''), click: temModelos },
       maqPct != null ? { label: '% da Meta', value: (maqPct*100).toFixed(1)+'%', cls: maqPct>=1?'good':'neutral' } : null,
       d.maqValor ? { label: 'Valor Total', value: fmt(d.maqValor), cls: 'neutral' } : null,
     ].filter(Boolean);
@@ -826,6 +932,15 @@ function abrirModalMaquinas() {
   document.getElementById('modal-maquinas').classList.add('open');
 }
 
+function showPainel(nome, btn) {
+  document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+  const alvo = document.getElementById('painel-' + nome);
+  if (alvo) alvo.classList.add('active');
+  document.querySelectorAll('.side-menu-item').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
 function fecharModalMaquinas() {
   document.getElementById('modal-maquinas').classList.remove('open');
 }
@@ -864,6 +979,10 @@ function exportarExcel() {
     ['GAP da Meta', d.gap || 0],
     ['Meta do Dia', d.metaDia || 0],
     ['Margem %', d.margem ? +(Math.abs(d.margem)<=1?d.margem*100:d.margem).toFixed(1) : 0],
+    [],
+    ['Meta Anual', d.metaAnual || 0],
+    ['Realizado Anual', d.realizadoAnual || 0],
+    ['% da Meta Anual', d.metaAnual > 0 ? +((d.realizadoAnual||0)/d.metaAnual*100).toFixed(1) : 0],
     [],
     ['Meta de Clientes', d.metaCli || 0],
     ['Clientes Compraram', d.qtdCli || 0],
